@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kozioł Poznań vs FC Zawady 2</title>
+
+  <style>
+    :root {
+      --yellow: #f5d000;
+      --green: #19a34a;
+      --black: #080808;
+      --dark: #111111;
+      --white: #ffffff;
+      --gray: #bdbdbd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, #173c20 0, transparent 35%),
+        linear-gradient(135deg, #050505, #111111);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1000px, 92%);
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 70px 15px 35px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: #000;
+      padding: 9px 18px;
+      border-radius: 30px;
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 0.95;
+      text-transform: uppercase;
+      font-weight: 1000;
+    }
+
+    h1 .vs {
+      color: var(--yellow);
+    }
+
+    .subtitle {
+      color: var(--gray);
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    .info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .info-card {
+      background: #151515;
+      border: 1px solid #292929;
+      border-bottom: 4px solid var(--green);
+      border-radius: 16px;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .info-card .icon {
+      font-size: 25px;
+    }
+
+    .info-card small {
+      display: block;
+      color: var(--gray);
+      text-transform: uppercase;
+      margin-top: 7px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 18px;
+    }
+
+    .green {
+      color: #35d96d;
+    }
+
+    .form-box {
+      max-width: 620px;
+      margin: 35px auto;
+      padding: 30px;
+      background: #121212;
+      border: 1px solid #292929;
+      border-radius: 20px;
+      box-shadow: 0 15px 50px rgba(0,0,0,.35);
+    }
+
+    .form-box h2 {
+      margin-top: 0;
+      text-transform: uppercase;
+    }
+
+    label {
+      display: block;
+      color: var(--gray);
+      margin: 15px 0 7px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      background: #080808;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--yellow);
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      padding: 17px;
+      margin-top: 22px;
+      border-radius: 11px;
+      background: var(--yellow);
+      color: #000;
+      font-weight: 1000;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: #ffe34d;
+    }
+
+    button:disabled {
+      background: #555;
+      color: #aaa;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .remaining {
+      text-align: center;
+      margin-top: 15px;
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .remaining strong {
+      color: var(--green);
+    }
+
+    /* BILET */
+
+    #ticketSection {
+      display: none;
+      margin: 40px auto;
+      max-width: 750px;
+    }
+
+    .ticket {
+      background: white;
+      color: #111;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    .ticket-header {
+      background: linear-gradient(110deg, #111 0%, #111 65%, #f5d000 65%);
+      color: white;
+      padding: 28px;
+    }
+
+    .ticket-header small {
+      color: #ddd;
+      font-weight: bold;
+    }
+
+    .ticket-header h2 {
+      margin: 8px 0;
+      font-size: 30px;
+      text-transform: uppercase;
+    }
+
+    .ticket-body {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: 25px;
+    }
+
+    .ticket-data {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .ticket-data span {
+      display: block;
+      color: #777;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .ticket-data strong {
+      display: block;
+      margin-top: 5px;
+    }
+
+    .qr {
+      width: 140px;
+      height: 140px;
+      border: 7px solid #111;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 900;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          #111 0,
+          #111 5px,
+          white 5px,
+          white 10px
+        );
+    }
+
+    .qr span {
+      background: white;
+      padding: 5px;
+      font-size: 13px;
+    }
+
+    .ticket-footer {
+      border-top: 2px dashed #aaa;
+      padding: 17px 28px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .print-button {
+      margin-top: 18px;
+      background: var(--green);
+      color: white;
+    }
+
+    .success {
+      text-align: center;
+      color: #43e477;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      padding: 40px 10px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 650px) {
+      .info {
+        grid-template-columns: 1fr;
+      }
+
+      .ticket-body {
+        grid-template-columns: 1fr;
+      }
+
+      .ticket-data {
+        grid-template-columns: 1fr;
+      }
+
+      .qr {
+        margin-top: 5px;
+      }
+
+      .ticket-footer {
+        display: block;
+      }
+
+      .ticket-footer div {
+        margin: 5px 0;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      header,
+      .info,
+      .form-box,
+      footer,
+      .print-button {
+        display: none !important;
+      }
+
+      #ticketSection {
+        display: block !important;
+        margin: 0;
+      }
+
+      .ticket {
+        box-shadow: none;
+        border: 1px solid #aaa;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <div class="badge">⚽ DARMOWY WSTĘP</div>
+
+      <h1>
+        Kozioł Poznań
+        <span class="vs">VS</span>
+        FC Zawady 2
+      </h1>
+
+      <p class="subtitle">
+        Odbierz darmowy bilet na mecz
+      </p>
+    </header>
+
+
+    <section class="info">
+
+      <div class="info-card">
+        <div class="icon">📅</div>
+        <small>Data meczu</small>
+        <strong>Do ustalenia</strong>
+      </div>
+
+      <div class="info-card">
+        <div class="icon">🕐</div>
+        <small>Godzina</small>
+        <strong>Do ustalenia</strong>
+      </div>
+
+      <div class="info-card">
+        <div class="icon">🎟️</div>
+        <small>Dostępne bilety</small>
+        <strong>
+          <span id="remaining" class="green">30</span> / 30
+        </strong>
+      </div>
+
+    </section>
+
+
+    <section class="form-box">
+
+      <h2>🎟️ Odbierz bilet</h2>
+
+      <form id="ticketForm">
+
+        <label for="name">Imię</label>
+        <input
+          id="name"
+          type="text"
+          placeholder="Twoje imię"
+          required
+        >
+
+        <label for="surname">Nazwisko</label>
+        <input
+          id="surname"
+          type="text"
+          placeholder="Twoje nazwisko"
+          required
+        >
+
+        <label for="email">E-mail</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="twoj@email.pl"
+          required
+        >
+
+        <button id="submitButton" type="submit">
+          ODBIERAM DARMOWY BILET
+        </button>
+
+      </form>
+
+      <div class="remaining">
+        Miejsca: <strong>STOJĄCE</strong>
+      </div>
+
+      <div id="success" class="success"></div>
+
+    </section>
+
+
+    <!-- WYGNEROWANY BILET -->
+
+    <section id="ticketSection">
+
+      <div class="ticket">
+
+        <div class="ticket-header">
+          <small>DARMOWY BILET • MIEJSCE STOJĄCE</small>
+
+          <h2>
+            Kozioł Poznań<br>
+            vs FC Zawady 2
+          </h2>
+
+          <div>
+            Data i godzina: do ustalenia
+          </div>
+        </div>
+
+
+        <div class="ticket-body">
+
+          <div class="ticket-data">
+
+            <div>
+              <span>Uczestnik</span>
+              <strong id="ticketName"></strong>
+            </div>
+
+            <div>
+              <span>Numer biletu</span>
+              <strong id="ticketNumber"></strong>
+            </div>
+
+            <div>
+              <span>Data</span>
+              <strong>Do ustalenia</strong>
+            </div>
+
+            <div>
+              <span>Godzina</span>
+              <strong>Do ustalenia</strong>
+            </div>
+
+            <div>
+              <span>Miejsce</span>
+              <strong>Stojące</strong>
+            </div>
+
+            <div>
+              <span>Cena</span>
+              <strong>0,00 zł</strong>
+            </div>
+
+          </div>
+
+
+          <div class="qr">
+            <span id="qrNumber">QR</span>
+          </div>
+
+        </div>
+
+
+        <div class="ticket-footer">
+
+          <div>
+            ⚽ Kozioł Poznań vs FC Zawady 2
+          </div>
+
+          <div>
+            Bilet: <strong id="ticketNumber2"></strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="print-button"
+        onclick="window.print()"
+      >
+        🖨️ DRUKUJ BILET / ZAPISZ PDF
+      </button>
+
+    </section>
+
+
+    <footer>
+      Kozioł Poznań • Darmowy wstęp • Miejsce stojące
+    </footer>
+
+  </div>
+
+
+<script>
+
+  const MAX_TICKETS = 30;
+
+  /*
+    Liczba wydanych biletów jest zapisywana
+    w pamięci przeglądarki.
+  */
+
+  let issuedTickets =
+    Number(localStorage.getItem("koziolTickets")) || 0;
+
+
+  const remainingElement =
+    document.getElementById("remaining");
+
+  const button =
+    document.getElementById("submitButton");
+
+  const form =
+    document.getElementById("ticketForm");
+
+
+  function updateCounter() {
+
+    const remaining =
+      Math.max(0, MAX_TICKETS - issuedTickets);
+
+    remainingElement.textContent = remaining;
+
+    if (remaining === 0) {
+
+      button.disabled = true;
+
+      button.textContent =
+        "BRAK DOSTĘPNYCH BILETÓW";
+
+      remainingElement.style.color =
+        "#ff4444";
+    }
+  }
+
+
+  updateCounter();
+
+
+  form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+
+    if (issuedTickets >= MAX_TICKETS) {
+
+      alert("Niestety, wszystkie bilety zostały już wydane.");
+
+      updateCounter();
+
+      return;
+    }
+
+
+    const name =
+      document.getElementById("name").value.trim();
+
+    const surname =
+      document.getElementById("surname").value.trim();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+
+    if (!name || !surname || !email) {
+
+      alert("Uzupełnij wszystkie pola.");
+
+      return;
+    }
+
+
+    issuedTickets++;
+
+
+    localStorage.setItem(
+      "koziolTickets",
+      issuedTickets
+    );
+
+
+    const ticketNumber =
+      "KOZ-" +
+      String(issuedTickets).padStart(3, "0");
+
+
+    document.getElementById("ticketName")
+      .textContent =
+      name + " " + surname;
+
+
+    document.getElementById("ticketNumber")
+      .textContent =
+      ticketNumber;
+
+
+    document.getElementById("ticketNumber2")
+      .textContent =
+      ticketNumber;
+
+
+    document.getElementById("qrNumber")
+      .textContent =
+      ticketNumber;
+
+
+    document.getElementById("success")
+      .textContent =
+      "Bilet został wygenerowany! 🎟️";
+
+
+    document.getElementById("ticketSection")
+      .style.display =
+      "block";
+
+
+    document.getElementById("ticketSection")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+
+    updateCounter();
+
+  });
+
+</script>
+
+</body>
+</html>
